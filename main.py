@@ -16,8 +16,7 @@ app = FastAPI()
 key_value_store = redis.StrictRedis(host='localhost', port=REDIS_PORT, db=REDIS_STORAGE_DB)
 
 # Configure Huey with Redis as the message store
-huey = RedisHuey(url=f"redis://localhost:{REDIS_PORT}/{REDIS_HUEY_DB}")
-
+huey = RedisHuey(name='task-queue', url=f"redis://localhost:{REDIS_PORT}/{REDIS_HUEY_DB}")
 
 
 
@@ -26,17 +25,16 @@ class Item(BaseModel):
     value: str
 
 
-
+@huey.task()
+def hello():
+    print("task executing...")
+    return "Hello world"
 
 
 @huey.task()
 def async_get_key(key: str):
     value = key_value_store.get(key)
-
-    if value is None:
-        return False
-    else:
-        return value
+    return value
      
 
 @huey.task()
@@ -58,25 +56,28 @@ def get_task_state(task_id: str):
       str: The state of the task (e.g., PENDING, STARTED, FINISHED, FAILED).
   """
   all_tasks = huey.pending()
-  task_info = all_tasks.get(task_id)
-  if task_info:
-    return task_info['state']
-  else:
-    # Task not found
-    return "Task not found"
+  for task in all_tasks:
+      if (task.id == task_id):
+          print(dir(task))
+          return task
+  return "Task not found"
+    
 
 
 
 
 @app.get("/")
 async def ping():
-    return {"res": "pong"}
+    res = hello()
+    msg = res()
+    return {"res": msg}
 
 
 @app.get("/get/{key}")
 async def read_key(key: str):
     res = async_get_key(key)
-    value = res()
+    value = res(blocking=True)
+    # value = key_value_store.get(key)
 
     if value is None:
         raise HTTPException(status_code=404, detail="Key not found")
