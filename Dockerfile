@@ -13,17 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
-# Start redis server
-RUN redis-server
-
-# Start huey consumer
-RUN huey_consumer.py main.huey
-
 # Copy the current directory contents into the container at /app
 COPY . /app
 
 # Define environment variable for FastAPI to run in "production" mode
-# ENV FASTAPI_ENV=production
+# ENV FASTAPI_ENV=development
 
 # Run app.py when the container launches
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

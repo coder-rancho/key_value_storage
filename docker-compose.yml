@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  fastapi:
+    build: .
+    ports:
+      - "8000:80"
+    depends_on:
+      - redis
+      - huey-worker
+
+  redis:
+    image: "redis:7.0-alpine"
+    ports:
+      - "6379:6379"
+
+  huey-worker:
+    build: .
+    command: huey_consumer.py app.huey_tasks.huey
+    depends_on:
+      - redis
