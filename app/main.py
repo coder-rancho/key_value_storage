@@ -1,49 +1,14 @@
 from fastapi import FastAPI, HTTPException
-from huey import RedisHuey
 from pydantic import BaseModel
-import redis
-
-# Constants
-REDIS_PORT = 6379
-REDIS_STORAGE_DB = 0
-REDIS_HUEY_DB = 1
-
-
+from app.huey_tasks import *
 
 
 app = FastAPI()
-
-key_value_store = redis.StrictRedis(host='localhost', port=REDIS_PORT, db=REDIS_STORAGE_DB)
-
-# Configure Huey with Redis as the message store
-huey = RedisHuey(name='task-queue', url=f"redis://localhost:{REDIS_PORT}/{REDIS_HUEY_DB}")
-
-
 
 class Item(BaseModel):
     key: str
     value: str
 
-
-@huey.task()
-def hello():
-    print("task executing...")
-    return "Hello world"
-
-
-@huey.task()
-def async_get_key(key: str):
-    value = key_value_store.get(key)
-    return value
-     
-
-@huey.task()
-def async_create_key(key: str, value: str):
-    return key_value_store.set(key, value)
-
-@huey.task()
-def async_delete_key(key: str):
-    return key_value_store.delete(key) > 0
 
 
 def get_task_state(task_id: str):
