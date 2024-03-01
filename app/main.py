@@ -23,7 +23,7 @@ def get_task_state(task_id: str):
   all_tasks = huey.pending()
   for task in all_tasks:
       if (task.id == task_id):
-          print(dir(task))
+          print(dir(task))  
           return task
   return "Task not found"
     

@@ -19,5 +19,8 @@ COPY . /app
 # Define environment variable for FastAPI to run in "production" mode
 # ENV FASTAPI_ENV=development
 
-# Run app.py when the container launches
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Define an entrypoint script
+ENTRYPOINT ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+
+# Additional commands can be specified in CMD
+CMD ["huey_consumer.py", "app.huey_tasks.huey"]
