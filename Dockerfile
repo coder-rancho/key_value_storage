@@ -1,5 +1,11 @@
 # Use an official Python runtime as a parent image
-FROM python:3.10
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+
+# Install supervisor
+RUN apt-get update && apt-get install -y supervisor
+
+# make them executable
+# RUN chmod +x /usr/src/app/scripts/*.sh
 
 # Set the working directory to /app
 WORKDIR /app
@@ -13,14 +19,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
+# Copy supervisord configs and scripts
+COPY supervisord.conf /etc/supervisord.conf
+
 # Copy the current directory contents into the container at /app
 COPY . /app
 
 # Define environment variable for FastAPI to run in "production" mode
 # ENV FASTAPI_ENV=development
 
-# Define an entrypoint script
-ENTRYPOINT ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
-
-# Additional commands can be specified in CMD
-CMD ["huey_consumer.py", "app.huey_tasks.huey"]
+# Run app.py when the container launches
+CMD ["/usr/bin/supervisord"]
