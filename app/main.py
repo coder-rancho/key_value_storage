@@ -34,7 +34,7 @@ def get_task_state(task_id: str):
 @app.get("/")
 async def ping():
     res = hello()
-    msg = res()
+    msg = res(blocking=True)
     return {"res": msg}
 
 
