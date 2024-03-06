@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: huey-worker-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: huey-worker
@@ -16,3 +16,6 @@ spec:
       - name: huey-worker
         image: coderancho/key_value_storage-huey-worker:v0.1  # Update with your Docker Hub details
         command: ["huey_consumer.py", "app.huey_tasks.huey"]
+        env:
+        - name: REDIS_SERVICE_NAME
+          value: redis-service.default.svc.cluster.local

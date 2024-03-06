@@ -9,13 +9,15 @@ spec:
   - protocol: TCP
     port: 6379
     targetPort: 6379
+
 ---
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: redis-statefulset
 spec:
-  serviceName: "redis"
+  serviceName: "redis-service"
   replicas: 1
   selector:
     matchLabels:

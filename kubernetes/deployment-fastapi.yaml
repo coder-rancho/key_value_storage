@@ -14,6 +14,9 @@ spec:
     spec:
       containers:
       - name: fastapi
-        image: coderancho/key_value_storage-fastapi:v0.1  # Updatse with your Docker Hub details
+        image: coderancho/key_value_storage-fastapi:v0.1
         ports:
         - containerPort: 80
+        env:
+        - name: REDIS_SERVICE_NAME
+          value: redis-service.default.svc.cluster.local
