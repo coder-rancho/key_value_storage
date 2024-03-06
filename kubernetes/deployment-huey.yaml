@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: huey-worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: huey-worker
+  template:
+    metadata:
+      labels:
+        app: huey-worker
+    spec:
+      containers:
+      - name: huey-worker
+        image: coderancho/key_value_storage-huey_worker:v0.1  # Update with your Docker Hub details
+        command: ["huey_consumer.py", "app.huey_tasks.huey"]
