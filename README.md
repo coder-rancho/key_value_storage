@@ -3,7 +3,7 @@
 This repository contains the source code and configurations for a key-value storage application built with FastAPI, Redis, and Huey.
 
 # Demo
-[![Loom Video Preview](https://i.ibb.co/g9ngvBZ/Screenshot-from-2024-03-06-18-05-31.png)](INSERT_VIDEO_LINK)
+[![Loom Video Preview](https://i.ibb.co/g9ngvBZ/Screenshot-from-2024-03-06-18-05-31.png)](https://www.loom.com/share/e010df061f064ec7a18f727043c1d6ef?sid=74aebcb8-3d7c-4226-ac22-3a6def888fc0)
 
 ## Table of Contents
 
