@@ -17,7 +17,14 @@ EXPOSE 80
 COPY . /app
 
 # Define environment variable for FastAPI to run in "production" mode
+
 # ENV FASTAPI_ENV=development
+
+# Set REDIS_SERVICE_NAME based on deployment context:
+# - Docker Compose: service name from docker-compose.yml
+# - Kubernetes: metadata.name from redis-service.yml
+# - Cloud Redis: IP address or hostname of the server
+ENV REDIS_SERVICE_NAME='redis'
 
 # Run app.py when the container launches
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
