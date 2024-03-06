@@ -14,5 +14,5 @@ spec:
     spec:
       containers:
       - name: huey-worker
-        image: coderancho/key_value_storage-huey_worker:v0.1  # Update with your Docker Hub details
+        image: coderancho/key_value_storage-huey-worker:v0.1  # Update with your Docker Hub details
         command: ["huey_consumer.py", "app.huey_tasks.huey"]
